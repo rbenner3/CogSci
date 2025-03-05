@@ -21,6 +21,11 @@ app.mount("/Users/rbenner/Documents/GitHub/cogsci_term_project/static/sample.pdf
 # Initialize the Mistral client
 client = Mistral(api_key=os.getenv("MISTRAL_API_KEY"))
 
+@cl.on_chat_start
+async def start_chat():
+    # Send an initial greeting message to the user
+    await cl.Message(content="🤖 Hello! Welcome to CogSci chat. How can I assist you today? 🧠🔬").send()
+
 def extract_text_from_pdf(pdf_path: str) -> str:
     document = fitz.open(pdf_path)
     text = ""
@@ -48,12 +53,12 @@ async def on_message(message: cl.Message):
     response = await client.chat.complete_async(
         model="mistral-small-latest",
         max_tokens=100,
-        temperature=0.5,
+        temperature=0.00,
         stream=False,
         messages=[
             {
                 "role": "system",
-                "content": "You are a helpful bot, you always reply in English"
+                "content": ""
             },
             {
                 "role": "user",
